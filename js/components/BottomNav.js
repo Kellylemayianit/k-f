@@ -1,0 +1,2 @@
+import {h} from '../core/dom.js';import {set} from '../core/store.js';
+export const BottomNav=r=>h('nav',{class:'bn','aria-label':'Mobile'},...[['/desk','Desk'],['/compare','Compare']].map(([p,t])=>h('a',{href:'#'+p,class:r.path===p?'on':'','aria-current':r.path===p?'page':null},t)),h('button',{onclick:()=>set({searchOpen:true})},'Search'));

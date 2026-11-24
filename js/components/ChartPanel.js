@@ -1,0 +1,17 @@
+import {h,tpl} from '../core/dom.js';import {state,set} from '../core/store.js';import {series,cot} from '../data/sample.js';import {chg} from './Watchlist.js';
+const small=()=>matchMedia('(max-width:720px)').matches;
+function chart(a,tf,ov){const[w,H,fs]=small()?[358,210,10]:[760,300,11],x0=8,x1=w-44,y0=12,y1=H-24,N=60,dx=(x1-x0)*.62/(N-1);
+const X=i=>x0+i*dx,Y=f=>y1-f*(y1-y0),pts=s=>s.map((v,i)=>`${X(i).toFixed(0)},${Y(v).toFixed(0)}`).join(' ');
+let m=series(a.id+tf,N);if(a.chg!=null&&(m[N-1]>m[0])!==(a.chg>0))m=m.map(v=>1-v);const inv=Math.max(.04,Math.min(...m.slice(41))-.06),o=series(a.id+'o'+tf,N).map((x,i)=>.12+.76*(1-(m[i]*.8+x*.2)));
+let s=`<svg viewBox="0 0 ${w} ${H}" width="100%" role="img" aria-label="${a.sym} price over time" font-size="${fs}">`;
+for(const f of[.2,.5,.8])s+=`<line x1="${x0}" x2="${x1}" y1="${Y(f)}" y2="${Y(f)}" style="stroke:var(--ln)"/>`;
+if(a.thesis){const t=X(41);s+=`<rect x="${t}" y="${y0}" width="${x1-t}" height="${y1-y0}" style="fill:var(--ac);fill-opacity:.1"/><text x="${t+6}" y="${y0+fs+2}" style="fill:var(--ac)">Thesis window, day 18 of 60</text><line x1="${t}" x2="${x1}" y1="${Y(inv)}" y2="${Y(inv)}" stroke-width="1.5" stroke-dasharray="5 4" style="stroke:var(--am)"/><text x="${x1-4}" y="${Y(.4)+fs+4}" text-anchor="end" style="fill:var(--am)">I'm wrong below [LEVEL]</text>`}
+if(ov&&a.id!=='DXY')s+=`<polyline points="${pts(o)}" fill="none" stroke-width="1.5" stroke-dasharray="3 3" style="stroke:var(--bl)"/>`;
+return s+`<polyline points="${pts(m)}" fill="none" stroke-width="2.25" style="stroke:var(--ink)"/><line x1="${X(N-1)}" x2="${X(N-1)}" y1="${y0}" y2="${y1}" style="stroke:var(--mu)"/><circle cx="${X(N-1)}" cy="${Y(m[N-1])}" r="4" style="fill:var(--ink)"/><text x="${X(N-1)-6}" y="${y1+16}" text-anchor="end" style="fill:var(--mu)">Today</text></svg>`}
+function strip(a){const c=cot(a.id),w=small()?358:760,H=small()?56:76,b=H/2,dx=(w-52)*.62/12;
+return `<svg viewBox="0 0 ${w} ${H}" width="100%" role="img" aria-label="Net positioning by week"><line x1="8" x2="${w-44}" y1="${b}" y2="${b}" style="stroke:var(--mu)"/>`+c.map((v,i)=>{const k=Math.abs(v)/24*(b-4);return `<rect x="${8+i*dx}" y="${v>0?b-k:b}" width="${Math.max(dx-6,4)}" height="${k}" style="fill:var(${v>0?'--ac':'--am'})"/>`}).join('')+'</svg>'}
+export function ChartPanel(a){const tf=state.tf,ov=state.overlay;
+return h('section',{class:'pn'},h('div',{class:'hd wrap'},h('div',{},h('div',{class:'mu'},a.name),h('div',{class:'big'},a.sym+' ',h('span',{class:'n'},a.last),' ',h('span',{class:'n '+(a.chg>0?'up':'dn')},a.chg==null?'':chg(a)+' this week'))),
+h('div',{class:'fr tight'},...['4H','1D','1W'].map(t=>h('button',{class:'chip'+(t===tf?' on':''),'aria-pressed':t===tf,'data-fk':'tf'+t,onclick:()=>set({tf:t})},t)),h('button',{class:'chip'+(ov?' on':''),'aria-pressed':ov,'data-fk':'ov',onclick:()=>set({overlay:!ov})},'Overlay: DXY'))),
+tpl(chart(a,tf,ov)),h('div',{class:'mu leg'},h('span',{},'Solid line: price'),ov&&a.id!=='DXY'?h('span',{style:'color:var(--bl)'},'Dashed line: DXY, rebased'):null),
+a.src==='defillama'?h('div',{class:'mu'},'Positioning is not tracked for crypto. Money flow comes from DefiLlama, see Compare, then Networks.'):h('div',{},h('div',{class:'hd'},h('b',{},'Big-trader positioning'),h('span',{class:'mu'},a.src==='manual'?'Typed in by you, [DATE]':'CFTC weekly, updated 4 days ago')),tpl(strip(a))))}

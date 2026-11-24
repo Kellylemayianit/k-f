@@ -1,0 +1,3 @@
+import {h} from '../core/dom.js';import {ASSETS} from '../data/sample.js';import {Watchlist} from '../components/Watchlist.js';import {ChartPanel} from '../components/ChartPanel.js';import {ThesisPanel} from '../components/ThesisPanel.js';
+export function Desk(r){const a=ASSETS.find(x=>x.id===r.q.get('sel'))||ASSETS[0];
+return h('main',{class:'bd'},h('div',{class:'col c1'},Watchlist(r)),h('div',{class:'col c2'},ChartPanel(a)),h('div',{class:'col c3'},ThesisPanel(a)))}

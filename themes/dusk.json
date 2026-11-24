@@ -1,0 +1,17 @@
+{
+ "id": "dusk",
+ "name": "Dusk",
+ "scheme": "dark",
+ "tokens": {
+  "bg": "#15171A",
+  "pn": "#1D2024",
+  "ink": "#ECEAE4",
+  "mu": "#A3A8A2",
+  "ln": "#30343A",
+  "ac": "#6FC29A",
+  "acf": "#0F1A14",
+  "bl": "#8FB1E3",
+  "am": "#E58B5C",
+  "sel": "#243029"
+ }
+}

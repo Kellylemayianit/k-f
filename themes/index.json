@@ -1,0 +1,29 @@
+[
+ {
+  "id": "ledger",
+  "name": "Ledger",
+  "sw": [
+   "#F3F1EA",
+   "#1B1F1C",
+   "#1E5B45"
+  ]
+ },
+ {
+  "id": "dusk",
+  "name": "Dusk",
+  "sw": [
+   "#15171A",
+   "#ECEAE4",
+   "#6FC29A"
+  ]
+ },
+ {
+  "id": "contrast",
+  "name": "High contrast",
+  "sw": [
+   "#FFFFFF",
+   "#000000",
+   "#0B4A2E"
+  ]
+ }
+]
