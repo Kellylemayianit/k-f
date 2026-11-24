@@ -1,0 +1,9 @@
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}@keyframes fade{from{opacity:0}}@keyframes pop{from{opacity:0;transform:scale(.97) translateY(4px)}}@keyframes pulse{50%{opacity:.45}}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes growx{from{transform:scaleX(0)}}@keyframes growy{from{transform:scaleY(0)}}@keyframes slin{from{opacity:0;transform:translateX(24px)}}@keyframes slout{to{opacity:0;transform:translateX(24px)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes load{to{width:100%}}
+.enter .rise{animation:rise .55s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}
+.enter .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s .35s ease forwards}.enter .band{animation:fade 1s .95s both}.enter .inv{animation:fade .8s 1.2s both}
+.enter .bt i{transform-origin:left;animation:growx .9s var(--ease) both;animation-delay:calc(.35s + var(--d,0)*90ms)}
+.enter .pos,.enter .neg{transform-box:fill-box;animation:growy .7s var(--ease) both;animation-delay:calc(.4s + var(--d,0)*45ms)}.enter .pos{transform-origin:bottom}.enter .neg{transform-origin:top}
+#splash{position:fixed;inset:0;background:var(--sb);color:#fff;display:grid;place-content:center;justify-items:center;gap:12px;z-index:400;transition:opacity .45s .1s,visibility .45s}#splash.out{opacity:0;visibility:hidden}
+#splash .mk{width:64px;height:64px;font-size:24px;animation:pop .6s var(--ease)}#splash b{font-size:18px;animation:fade .6s .2s both}#splash i{width:120px;height:3px;border-radius:2px;background:rgba(255,255,255,.2);position:relative;overflow:hidden}#splash i::after{content:"";position:absolute;left:0;top:0;height:3px;width:0;background:var(--sa);animation:load .9s .2s ease forwards}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}#splash{display:none}.enter .draw{stroke-dasharray:none;stroke-dashoffset:0}}

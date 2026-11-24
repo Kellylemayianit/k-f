@@ -1,0 +1,7 @@
+export const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+export const wait=ms=>new Promise(r=>setTimeout(r,reduced()?0:ms));
+export function stagger(root){let i=0;root.querySelectorAll('.rise').forEach(e=>e.style.setProperty('--i',i++))}
+export function countUp(root){root.querySelectorAll('[data-to]').forEach(e=>{const to=+e.dataset.to,d=+(e.dataset.dec||0),p=e.dataset.pre||'',s=e.dataset.suf||'',f=v=>p+v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})+s;if(reduced()){e.textContent=f(to);return}
+const t0=performance.now()+(+(e.closest('.rise')?.style.getPropertyValue('--i')||0))*70+250,dur=1000;e.textContent=f(0);const tick=n=>{const k=Math.max(0,Math.min(1,(n-t0)/dur));e.textContent=f(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)})}
+export const progress={el:null,t:0,start(){const b=this.el||(this.el=document.getElementById('bar'));clearTimeout(this.t);b.style.transition='none';b.style.opacity='1';b.style.width='0';b.offsetWidth;b.style.transition='width 1.2s cubic-bezier(.2,.7,.2,1)';b.style.width='72%'},
+done(){const b=this.el;b.style.transition='width .25s ease';b.style.width='100%';this.t=setTimeout(()=>{b.style.transition='opacity .3s';b.style.opacity='0'},260)}};

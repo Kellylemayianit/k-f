@@ -1,0 +1,6 @@
+import {h,tpl} from '../core/dom.js';import {wait} from '../core/motion.js';import {NETS,STABLE} from '../data/sample.js';import {Kpi,Panel,More} from '../components/ui.js';import {spark} from '../components/Chart.js';
+export const Flow={eyebrow:'Crypto',title:'Money flow',load:()=>wait(600),render(){const top=[...NETS].sort((a,b)=>b.d7-a.d7),mx=top[0].d7;
+return h('div',{class:'vw',style:'padding:0'},
+h('div',{class:'kpis'},Kpi('layers','$'+NETS.reduce((s,n)=>s+n.tvl,0).toFixed(1)+'B','Total locked','Six networks, sample',{to:NETS.reduce((s,n)=>s+n.tvl,0),dec:1,pre:'$',suf:'B'}),Kpi('flow','+2.1%','Stablecoin supply, 7 days','DefiLlama',{c:'up',to:2.1,dec:1,pre:'+',suf:'%'}),Kpi('usd','$'+NETS.reduce((s,n)=>s+n.vol,0).toFixed(1)+'B','Trading volume, 24 h','DEX only',{to:NETS.reduce((s,n)=>s+n.vol,0),dec:1,pre:'$',suf:'B'}),Kpi('pool','6.1%','Best stablecoin yield','Pool C, sample',{to:6.1,dec:1,suf:'%'})),
+h('div',{class:'two'},Panel('Where money is moving',More('/networks','All networks'),top.map((n,i)=>h('div',{class:'br'},h('span',{},n.name),h('div',{class:'bt'},h('i',{style:`width:${Math.max(4,n.d7/mx*100)}%;--d:${i}`})),h('span',{class:'n '+(n.d7>=0?'up':'dn')},(n.d7>=0?'+':'')+n.d7+'%')))),
+Panel('Stablecoin supply, 12 weeks',null,[tpl(spark('stable',true,320,120)),h('div',{class:'mu'},'Growing supply often means cash is waiting nearby.')]))) }}

@@ -1,10 +1,16 @@
-import {Topbar} from './components/Topbar.js';import {BottomNav} from './components/BottomNav.js';import {mountPalette} from './components/SearchPalette.js';import {Desk} from './views/Desk.js';import {Compare} from './views/Compare.js';
-import {SPRITE} from './core/dom.js';import {state,set,subscribe} from './core/store.js';import {onRoute} from './core/router.js';import {init,load} from './core/themes.js';
-const app=document.getElementById('app');let route,key='';
-function render(){const k=document.activeElement?.dataset?.fk;app.replaceChildren(Topbar(route),route.path==='/compare'?Compare(route):Desk(route),BottomNav(route));if(k)app.querySelector(`[data-fk="${k}"]`)?.focus();document.title=(route.path==='/compare'?'Compare':'Desk')+' · Research desk'}
-async function sync(){const k=state.theme+JSON.stringify(state.custom);if(k===key)return;key=k;try{await load(state.theme,state.custom)}catch{set({theme:'ledger'})}}
-(async()=>{await init();document.body.insertAdjacentHTML('afterbegin',SPRITE);await sync();mountPalette();
-subscribe(async()=>{await sync();render()});
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(state.theme==='auto'){key='';sync()}});
-matchMedia('(max-width:720px)').addEventListener('change',()=>render());
-let lp;onRoute(r=>{route=r;set(lp!==r.path?{filtersOpen:false}:{});lp=r.path})})();
+import {Sidebar} from './components/Sidebar.js';import {Topbar} from './components/Topbar.js';import {BottomNav} from './components/BottomNav.js';import {mountPalette} from './components/SearchPalette.js';import {mountDialog} from './components/CheckinDialog.js';import {Skeleton} from './components/ui.js';
+import {Home} from './views/Home.js';import {Dollar} from './views/Dollar.js';import {Bets} from './views/Bets.js';import {Flow} from './views/Flow.js';import {Networks} from './views/Networks.js';import {Yields} from './views/Yields.js';import {Thesis} from './views/Thesis.js';import {Checkins} from './views/Checkins.js';import {Compare} from './views/Compare.js';import {Terminal,Vault} from './views/Later.js';
+import {SPRITE} from './core/dom.js';import {state,set,subscribe} from './core/store.js';import {onRoute} from './core/router.js';import {init,load} from './core/themes.js';import {stagger,countUp,progress,reduced} from './core/motion.js';
+const V={'/home':Home,'/dollar':Dollar,'/bets':Bets,'/flow':Flow,'/networks':Networks,'/yields':Yields,'/thesis':Thesis,'/checkins':Checkins,'/compare':Compare,'/terminal':Terminal,'/vault':Vault};
+const $=id=>document.getElementById(id);let route,view,data,tok=0,key='',lastPath;
+function chrome(){const k=document.activeElement?.dataset?.fk;$('sbh').replaceChildren(Sidebar(route));$('tbh').replaceChildren(Topbar(view));$('bnh').replaceChildren(BottomNav(route));$('shell').classList.toggle('open',state.drawer);if(k)document.querySelector(`[data-fk="${k}"]`)?.focus()}
+function paint(anim){const k=document.activeElement?.dataset?.fk,sy=scrollY,el=$('view');const node=view.render(data,route);el.replaceChildren(...node.children);el.classList.toggle('enter',anim);if(anim){stagger(el);scrollTo(0,0)}else scrollTo(0,sy);countUp(el);if(!anim&&k)document.querySelector(`[data-fk="${k}"]`)?.focus()}
+async function navigate(r){route=r;view=V[r.path]||Home;const my=++tok;set({drawer:false});progress.start();document.title=view.title+' · Research desk';chrome();$('view').classList.remove('enter');$('view').replaceChildren(...Skeleton().children);
+const d=await view.load(r);if(my!==tok)return;data=d;chrome();paint(true);progress.done()}
+async function sync(){const k=state.theme+JSON.stringify(state.custom);if(k===key)return;key=k;try{await load(state.theme,state.custom)}catch{set({theme:'harbor'})}}
+(async()=>{await init();document.body.insertAdjacentHTML('afterbegin',SPRITE);await sync();mountPalette();mountDialog();
+const sp=$('splash');if(sessionStorage.getItem('rd:s')||reduced())sp.remove();else{sessionStorage.setItem('rd:s','1');setTimeout(()=>sp.classList.add('out'),1100);setTimeout(()=>sp.remove(),1700)}
+subscribe(async()=>{await sync();if(data){chrome();paint(false)}});
+$('scrim').addEventListener('click',()=>set({drawer:false}));addEventListener('keydown',e=>{if(e.key==='Escape'&&state.drawer)set({drawer:false})});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(state.theme==='auto'){key='';sync()}});matchMedia('(max-width:720px)').addEventListener('change',()=>data&&paint(false));
+onRoute(r=>navigate(r))})();

@@ -1,0 +1,4 @@
+import {h} from '../core/dom.js';import {state,set} from '../core/store.js';import {wait} from '../core/motion.js';import {SEED_CHECKINS} from '../data/sample.js';import {Panel} from '../components/ui.js';
+export const Checkins={eyebrow:'My work',title:'Check-ins',load:()=>wait(350),render(){const all=[...state.checkins,...SEED_CHECKINS];
+return h('div',{class:'vw',style:'padding:0'},h('div',{class:'hd rise',style:'display:flex;justify-content:space-between;align-items:center'},h('p',{class:'mu'},`${all.length} check-ins, newest first`),h('button',{class:'cta',onclick:()=>set({dlg:true})},'Add check-in')),
+Panel('Weekly log',null,h('div',{},...all.map(c=>h('div',{class:'kv',style:'padding:14px 18px;align-items:flex-start'},h('div',{},h('b',{},c.label),h('div',{class:'mu'},c.status)),h('p',{style:'max-width:560px;text-align:right'},c.note)))),'z'))}}

@@ -1,0 +1,14 @@
+import {series,cot as cotData} from '../data/sample.js';
+const small=()=>matchMedia('(max-width:720px)').matches;
+export const dims=(big,sm)=>small()?sm:big;
+export function priceChart(a,tf,ov,[w,H,fs]){const x0=8,x1=w-8,y0=12,y1=H-22,N=60,dx=(x1-x0)*.7/(N-1),X=i=>x0+i*dx,Y=f=>y1-f*(y1-y0),pts=s=>s.map((v,i)=>`${X(i).toFixed(0)},${Y(v).toFixed(0)}`).join(' ');
+let m=series(a.id+tf,N);if(a.chg!=null&&(m[N-1]>m[0])!==(a.chg>0))m=m.map(v=>1-v);
+const o=series(a.id+'o'+tf,N).map((x,i)=>.12+.76*(1-(m[i]*.8+x*.2))),inv=Math.max(.04,Math.min(...m.slice(41))-.06);
+let s=`<svg viewBox="0 0 ${w} ${H}" width="100%" role="img" aria-label="${a.sym} price over time" font-size="${fs}" font-family="Inter,sans-serif">`;
+for(const f of[.2,.5,.8])s+=`<line x1="${x0}" x2="${x1}" y1="${Y(f)}" y2="${Y(f)}" style="stroke:var(--ln)"/>`;
+if(a.thesis){const t=X(41);s+=`<rect class="band" x="${t}" y="${y0}" width="${x1-t}" height="${y1-y0}" style="fill:var(--ac);fill-opacity:.12"/><text class="band" x="${t+6}" y="${y0+fs+2}" style="fill:var(--ac)">Thesis window, day 18 of 60</text><g class="inv"><line x1="${t}" x2="${x1}" y1="${Y(inv)}" y2="${Y(inv)}" stroke-width="1.5" stroke-dasharray="5 4" style="stroke:var(--hot)"/><text x="${x1-4}" y="${Y(inv)+fs+4}" text-anchor="end" style="fill:var(--hot)">I'm wrong below [LEVEL]</text></g>`}
+if(ov&&a.id!=='DXY')s+=`<polyline class="draw" pathLength="1" points="${pts(o)}" fill="none" stroke-width="1.5" style="stroke:var(--mu)" stroke-dasharray="3 3"/>`;
+return s+`<polyline class="draw" pathLength="1" points="${pts(m)}" fill="none" stroke-width="2.5" style="stroke:var(--ink)"/><line x1="${X(N-1)}" x2="${X(N-1)}" y1="${y0}" y2="${y1}" style="stroke:var(--mu)"/><circle class="band" cx="${X(N-1)}" cy="${Y(m[N-1])}" r="4" style="fill:var(--ink)"/><text x="${X(N-1)-6}" y="${y1+15}" text-anchor="end" style="fill:var(--mu)">Today</text></svg>`}
+export function strip(vals,w,H){const b=H/2,dx=(w-16)*.7/12;return `<svg viewBox="0 0 ${w} ${H}" width="100%" role="img" aria-label="Net positioning by week"><line x1="8" x2="${w-8}" y1="${b}" y2="${b}" style="stroke:var(--mu)"/>`+vals.map((v,i)=>{const k=Math.max(2,Math.abs(v)/24*(b-3));return `<rect class="${v>0?'pos':'neg'}" style="--d:${i};fill:var(${v>0?'--up':'--dn'})" x="${8+i*dx}" y="${v>0?b-k:b}" width="${Math.max(dx-6,4)}" height="${k}"/>`}).join('')+'</svg>'}
+export const cotStrip=(id,w,H)=>strip(cotData(id),w,H);
+export function spark(seed,up=true,w=120,H=36){const s=series(seed,12),a=(s[11]>s[0])===up?s:s.map(v=>1-v);return `<svg viewBox="0 0 ${w} ${H}" width="100%" height="${H}" aria-hidden="true"><polyline class="draw" pathLength="1" fill="none" stroke-width="2" style="stroke:var(${up?'--up':'--dn'})" points="${a.map((v,i)=>`${(i*w/11).toFixed(0)},${(H-4-v*(H-8)).toFixed(0)}`).join(' ')}"/></svg>`}

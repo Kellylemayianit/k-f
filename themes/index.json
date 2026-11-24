@@ -1,5 +1,14 @@
 [
  {
+  "id": "harbor",
+  "name": "Harbor",
+  "sw": [
+   "#060D1F",
+   "#E8EFFF",
+   "#38BDF8"
+  ]
+ },
+ {
   "id": "ledger",
   "name": "Ledger",
   "sw": [
@@ -15,15 +24,6 @@
    "#15171A",
    "#ECEAE4",
    "#6FC29A"
-  ]
- },
- {
-  "id": "contrast",
-  "name": "High contrast",
-  "sw": [
-   "#FFFFFF",
-   "#000000",
-   "#0B4A2E"
   ]
  }
 ]

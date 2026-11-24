@@ -1,2 +1,2 @@
-import {h} from '../core/dom.js';import {set} from '../core/store.js';
-export const BottomNav=r=>h('nav',{class:'bn','aria-label':'Mobile'},...[['/desk','Desk'],['/compare','Compare']].map(([p,t])=>h('a',{href:'#'+p,class:r.path===p?'on':'','aria-current':r.path===p?'page':null},t)),h('button',{onclick:()=>set({searchOpen:true})},'Search'));
+import {h,icon} from '../core/dom.js';import {set} from '../core/store.js';
+export const BottomNav=r=>h('nav',{class:'bn','aria-label':'Quick'},...[['/home','home','Home'],['/dollar','usd','Dollar'],['/flow','flow','Crypto'],['/thesis','target','My view']].map(([p,i,t])=>h('a',{href:'#'+p,class:r.path===p?'on':'','aria-current':r.path===p?'page':null},icon(i),t)),h('button',{onclick:()=>set({drawer:true})},icon('more'),'More'));

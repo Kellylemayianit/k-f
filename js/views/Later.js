@@ -1,0 +1,4 @@
+import {h,icon} from '../core/dom.js';import {wait} from '../core/motion.js';
+const mk=(title,text)=>({eyebrow:'Coming later',title,load:()=>wait(250),render(){return h('div',{class:'vw',style:'padding:0'},h('div',{class:'panel lock rise'},h('div',{class:'ki'},icon('lock')),h('h2',{},title),h('p',{class:'mu',style:'max-width:420px'},text)))}});
+export const Terminal=mk('Terminal','Place and track trades from here. Research comes first; the terminal arrives once the data and journal are solid.');
+export const Vault=mk('Fund vault','Open-source vault with lockups and high-water-mark fees. It needs a verified track record first, so it comes last.');

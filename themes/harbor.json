@@ -1,0 +1,21 @@
+{
+ "id": "harbor",
+ "name": "Harbor",
+ "scheme": "dark",
+ "tokens": {
+  "bg": "#060D1F",
+  "sb": "#0A1530",
+  "card": "#0E1B3A",
+  "c2": "#13234B",
+  "ink": "#E8EFFF",
+  "mu": "#9DB0D6",
+  "ln": "#1F3160",
+  "ac": "#38BDF8",
+  "acf": "#04121F",
+  "hot": "#F05A1F",
+  "up": "#6EE0B0",
+  "dn": "#FF9A6B",
+  "sbi": "#C3D1F2",
+  "sa": "#38BDF8"
+ }
+}
